@@ -1,52 +1,121 @@
-function canvas() {
-    htmlCanvas = document.getElementById('Skiing');
-    context = htmlCanvas.getContext('2d');
+var c = document.getElementById('Skiing');
+var ctx = c.getContext('2d');
+let score = 0
 
-    function initialize() {
-        // Register an event listener to call the resizeCanvas() function 
-        // each time the window is resized.
-        window.addEventListener('resize', resizeCanvas, false);
-        resizeCanvas();
-    }
-    initialize();
-    // Display custom canvas. In this case it's a blue, 5 pixel 
-    // border that resizes along with the browser window.
-    function redraw() {
-        context.strokeStyle = 'red';
-        context.lineWidth = '2';
-        context.strokeRect(0, 0, window.innerWidth, window.innerHeight);
-    }
-    // Runs each time the DOM window resize event fires.
-    // Resets the canvas dimensions to match window,
-    // then draws the new borders accordingly.
-    function resizeCanvas() {
-        htmlCanvas.width = window.innerWidth;
-        htmlCanvas.height = window.innerHeight;
-        redraw();
-    }
-
+function initialize() {
+    // Register an event listener to call the resizeCanvas() function 
+    // each time the window is resized.
+    window.addEventListener('resize', resizeCanvas, false);
+    resizeCanvas();
 }
-canvas();
-
-var c = document.getElementById("Skiing")
-var width = c.width
-var height = c.height
-var ctx = c.getContext("2d")
+initialize();
+// Display custom canvas. In this case it's a blue, 5 pixel 
+// border that resizes along with the browser window.
 
 
-var level = 0;
-var gameOver = false
-var score = 0
+function scoreCheck() {
+    if (score < 10000) {
+        return "#ff0000";
+    };
+    if (score < 50000) {
+        var grd = ctx.createLinearGradient(0, 0, 0, c.height);
+        grd.addColorStop(0, "red");
+        grd.addColorStop(.1, "yellow");
+        grd.addColorStop(.2, "red");
+        grd.addColorStop(.3, "yellow");
+        grd.addColorStop(.4, "red");
+        grd.addColorStop(.5, "yellow");
+        grd.addColorStop(.6, "red");
+        grd.addColorStop(.7, "yellow");
+        grd.addColorStop(.8, "red");
+        grd.addColorStop(.9, "yellow");
+        grd.addColorStop(1, "red");
+        return grd;
+    };
+    if (score < 100000) {
+        var grd = ctx.createLinearGradient(c.height, 0, 0, 0);
+        grd.addColorStop(0, "green");
+        grd.addColorStop(.1, "black");
+        grd.addColorStop(.2, "green");
+        grd.addColorStop(.3, "black");
+        grd.addColorStop(.4, "green");
+        grd.addColorStop(.5, "black");
+        grd.addColorStop(.6, "green");
+        grd.addColorStop(.7, "black");
+        grd.addColorStop(.8, "green");
+        grd.addColorStop(.9, "black");
+        grd.addColorStop(1, "green");
+        return grd;
+    };
+    if (score < 150000) {
+        var grd = ctx.createLinearGradient(c.height, 0, 0, c.width);
+        grd.addColorStop(0, "blue");
+        grd.addColorStop(.1, "white");
+        grd.addColorStop(.2, "blue");
+        grd.addColorStop(.3, "white");
+        grd.addColorStop(.4, "blue");
+        grd.addColorStop(.5, "white");
+        grd.addColorStop(.6, "blue");
+        grd.addColorStop(.7, "white");
+        grd.addColorStop(.8, "blue");
+        grd.addColorStop(.9, "white");
+        grd.addColorStop(1, "blue");
+        return grd;
+    };
+    if (score < 300000) {
+        var grd = ctx.createLinearGradient(0, 0, ((c.width / 8) * 7), 0);
+        grd.addColorStop(0, "magenta");
+        grd.addColorStop(.1, "yellow");
+        grd.addColorStop(.2, "magenta");
+        grd.addColorStop(.3, "yellow");
+        grd.addColorStop(.4, "magenta");
+        grd.addColorStop(.5, "yellow");
+        grd.addColorStop(.6, "magenta");
+        grd.addColorStop(.7, "yellow");
+        grd.addColorStop(.8, "magenta");
+        grd.addColorStop(.9, "yellow");
+        grd.addColorStop(1, "Magenta");
+        return grd;
+    };
+    if (score < 450000) {
+        var grd = ctx.createLinearGradient(0, 0, ((c.width / 8) * 7), 0);
+        grd.addColorStop(0, "gold");
+        grd.addColorStop(.1, "purple");
+        grd.addColorStop(.2, "gold");
+        grd.addColorStop(.3, "purple");
+        grd.addColorStop(.4, "gold");
+        grd.addColorStop(.5, "purple");
+        grd.addColorStop(.6, "gold");
+        grd.addColorStop(.7, "purple");
+        grd.addColorStop(.8, "gold");
+        grd.addColorStop(.9, "purple");
+        grd.addColorStop(1, "gold");
+        return grd;
+    };
+};
 
+function redraw() {
+    ctx.strokeStyle = scoreCheck();
+    ctx.lineWidth = '5';
+    ctx.strokeRect(0, 0, window.innerWidth, window.innerHeight);
+}
+// Runs each time the DOM window resize event fires.
+// Resets the canvas dimensions to match window,
+// then draws the new borders accordingly.
+function resizeCanvas() {
+    c.width = window.innerWidth;
+    c.height = window.innerHeight;
+    redraw();
+}
 
 var state = {
-    size: {
-        w: 40,
-        h: 40,
+    stats: {
+        level: 0,
+        gameOver: false,
     },
     position: {
-        x: (width / 2),
-        y: (height / 2),
+        x: (c.width / 2),
+        y: (c.height / 2),
     },
     movement: {
         x: 0,
@@ -128,10 +197,10 @@ function updateMovement(p) {
     } else if (state.movement.x < -2) {
         state.movement.x = -2
     }
-    if (state.movement.y > 4 + (level / 100)) {
-        state.movement.y = 4 + (level / 100)
-    } else if (state.movement.y < 1.5 + (level / 100)) {
-        state.movement.y = 1.5 + (level / 100)
+    if (state.movement.y > 4 + (state.stats.level / 10)) {
+        state.movement.y = 4 + (state.stats.level / 10)
+    } else if (state.movement.y < 1.5 + (state.stats.level / 25)) {
+        state.movement.y = 1.5 + (state.stats.level / 25)
     }
 }
 
@@ -140,54 +209,50 @@ function updatePosition(p) {
     state.position.y += state.movement.y
 
     // Detect boundaries
-    if (state.position.x > width) {
-        state.position.x = width
+    if (state.position.x > c.width - 35) {
+        state.position.x = c.width - 35
     } else if (state.position.x < 0) {
         state.position.x = 0
     }
-    if (state.position.y > height) {
-        state.position.y -= height
-        console.log(level)
+    if (state.position.y > c.height) {
+        state.position.y -= c.height
         bushesX.length = 0
         bushesY.length = 0
-        addBushes(Math.floor(level + ((width * height) / 200000)));
+        addBushes(Math.floor(state.stats.level + ((c.width * c.height) / 200000)));
         treesX.length = 0
         treesY.length = 0
-        addTrees(level / 3);
-        return level++;
+        addTrees(state.stats.level / 3);
+        return state.stats.level++;
 
     } else if (state.position.y < 0) {
-        state.position.y += height;
+        state.position.y += c.height;
     }
 }
 
 function draw() {
-    ctx.clearRect(0, 0, width, height)
-    if (level === 0) {
-        if (width > 1190 && height > 1190) {
-            console.log("Large");
+    ctx.clearRect(0, 0, c.width, c.height)
+    redraw();
+    resizeCanvas();
+    if (state.stats.level === 0) {
+        if (c.width > 1200 && c.height > 1200) {
             var img = new Image();
             img.src = "js/images/largetitle.png";
             ctx.drawImage(img, 20, 40);
-        } else if (width > 1000 && height > 1000) {
-            console.log("medium");
+        } else if (c.width > 1000 && c.height > 1000) {
             var img = new Image();
             img.src = "js/images/mediumtitle.png";
             ctx.drawImage(img, 20, 40);
-        } else if (width > 800 && height > 800) {
-            console.log("small");
+        } else if (c.width > 800 && c.height > 800) {
             var img = new Image();
             img.src = "js/images/smalltitle.png";
             ctx.drawImage(img, 20, 40);
-        } else if (width > 600 && height > 600) {
-            console.log("tiny");
-            var img = new Image();
-            img.src = "js/images/smalltitle.png";
-            ctx.drawImage(img, 20, 40);
-        } else {
-            console.log("phone");
+        } else if (c.width > 600 && c.height > 600) {
             var img = new Image();
             img.src = "js/images/tinytitle.png";
+            ctx.drawImage(img, 20, 40);
+        } else {
+            var img = new Image();
+            img.src = "js/images/phone.png";
             ctx.drawImage(img, 20, 40);
         }
     }
@@ -218,8 +283,8 @@ function addBushes(M) {
     var placed = 0;
     var max = M
     while (placed < max) {
-        bushesX.push(Math.floor(Math.random() * htmlCanvas.width));
-        bushesY.push(Math.floor(Math.random() * htmlCanvas.height))
+        bushesX.push(Math.floor(Math.random() * c.width));
+        bushesY.push(Math.floor(Math.random() * c.height))
         placed += 1;
     }
 }
@@ -228,8 +293,8 @@ function addTrees(M) {
     var placed = 0;
     var max = M
     while (placed < max) {
-        treesX.push(Math.floor(Math.random() * htmlCanvas.width));
-        treesY.push(Math.floor(Math.random() * htmlCanvas.height))
+        treesX.push(Math.floor(Math.random() * c.width));
+        treesY.push(Math.floor(Math.random() * c.height))
         placed += 1;
     }
 }
@@ -252,13 +317,12 @@ function drawTrees() {
 
 function collision() {
     for (i = 0; i < bushesX.length; i++) {
-        var bush = { x: bushesX[i], y: bushesY[i], w: 5, h: 5 };
+        var bush = { x: bushesX[i], y: bushesY[i], w: 15, h: 10 };
         var player = { x: state.position.x, y: state.position.y, w: 20, h: 20 };
         if (bush.x < player.x + player.w && /*left*/
             bush.x + bush.w > player.x && /*right*/
             bush.y < player.y + player.h && /*top*/
             bush.y + bush.h > player.y) /*bottom*/ {
-            console.log("game over")
             stopGame();
         }
     };
@@ -269,7 +333,6 @@ function collision() {
             tree.x + tree.w > player.x && /*right*/
             tree.y < player.y + player.h && /*top*/
             tree.y + tree.h > player.y) /*bottom*/ {
-            console.log("game over")
             stopGame();
         }
     };
@@ -288,49 +351,49 @@ function updateScore() {
     playtime = new Date();
     var timeDiff = (playtime - startTimer) / 10000;
     if (state.pressedKeys.down === true) {
-        score += ((Math.round((timeDiff * (level) / 4) * 2)));
+        score += ((Math.round((timeDiff * (state.stats.level) / 4) * 2)));
     } else {
-        score += ((Math.round((timeDiff * (level) / 4) * 1)));
+        score += ((Math.round((timeDiff * (state.stats.level) / 4) * 1)));
     }
 
 }
+var song = new Audio('js/Sound/combined.m4a');
+var over = new Audio('js/Sound/Gameover3.m4a')
+
+song.play()
 
 function stopGame() {
     ctx.font = "45px bold Arial";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = scoreCheck();
     ctx.textAlign = "center";
-    ctx.fillText(`Final Score: ${score}`, width / 2, (height / 2) - 50);
+    ctx.fillText(`Final Score: ${score}`, c.width / 2, (c.height / 2));
     ctx.font = "60px bold Arial";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = scoreCheck();
     ctx.textAlign = "center";
-    ctx.fillText("OUCH!", width / 2, height / 2);
+    ctx.fillText("OUCH!", c.width / 2, (c.height / 2) - 65);
     ctx.font = "30px bold Arial";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = scoreCheck();
     ctx.textAlign = "center";
-    ctx.fillText(`Press "ENTER" to play again!`, (width / 2), (height / 2) + 50);
-    gameOver = true
+    ctx.fillText(`Press "ENTER" to play again!`, (c.width / 2), (c.height / 2) + 50);
+    state.stats.gameOver = true
+    song.pause()
+    over.play()
 }
 
 function statistics() {
     ctx.font = "20px bold Arial";
-    ctx.fillStyle = "Blue";
+    ctx.fillStyle = scoreCheck();
     ctx.textAlign = "right";
-    ctx.fillText(`level: ${level}  `, width, 40);
+    ctx.fillText(`Level: ${state.stats.level}  `, c.width, 40);
     ctx.font = "20px bold Arial";
-    ctx.fillStyle = "Red";
+    ctx.fillStyle = scoreCheck();
     ctx.textAlign = "right";
-    ctx.fillText(`Score: ${score}  `, width, 20);
+    ctx.fillText(`Score: ${score}  `, c.width, 20);
 }
-
-function drawTitle() {
-    console.log(width, height)
-
-};
-drawTitle();
 
 function loop(timestamp) {
     var progress = timestamp - lastRender
-    if (gameOver != true) {
+    if (state.stats.gameOver != true) {
         update(progress);
         draw();
         drawBushes();
@@ -345,9 +408,11 @@ function loop(timestamp) {
 
     lastRender = timestamp
     window.requestAnimationFrame(loop)
+    scoreCheck();
 }
 var lastRender = 0
 window.requestAnimationFrame(loop)
+
 
 function reload() {
     location.reload()
